@@ -1,0 +1,99 @@
+import psycopg2
+from flask import Flask, request, render_template
+
+app = Flask(__name__)
+
+# Database connection PostgreSQL
+def get_db_connection():
+    conn = psycopg2.connect(
+        dbname="db_name",
+        user="db_user",
+        password="db_password",
+        host="db_host",
+        port="db_port"
+    )
+    return conn
+
+@app.route('/submit_data', method=['POST'])
+def submit_data():
+    # Getting data from a form
+    city = request.form['city']
+    date = request.form['date']
+    specialist = request.form['specialist']
+    debet_card = request.form['debet_card']
+    activated_dc = request.form['activated_dc']
+    app_cc = request.form['app_cc']
+    issued_cc = request.form['issued_cc']
+    activated_cc = request.form['activated_cc']
+    life_insurance_cc = request.form['life_insurance_cc']
+    protection_cc = request.form['protection_cc']
+    app_loan = request.form['app_loan']
+    issued_loan = request.form['issued_loan']
+    insurance_loan = request.form['insurance_loan']
+    app_carloan = request.form['app_carloan']
+    issued_carloan = request.form['issued_carloan']
+    box_carloan = request.form['box_carloan']
+    mbg = request.form['mbg']
+    mci = request.form['mci']
+    mcc = request.form['mcc']
+    autoassistance = request.form['autoassistance']
+    issued_dc_cc = request.form['issued_dc_cc']
+    sold_dc_cc = request.form['sold_dc_cc']
+    rejected_dc_cc = request.form['rejected_dc_cc']
+    activated_dc_cc = request.form['activated_dc_cc']
+    life_insurance_dc_cc = request.form['life_insurance_dc_cc']
+    protection_dc_cc = request.form['protection_dc_cc']
+    savings_account = request.form['savings_account']
+    fund_savings_account = request.form['fund_savings_account']
+    gpbm = request.form['gpbm']
+    activated_gpbm = request.form['activated_gpbm']
+    payroll_project = request.form['payroll_project']
+    gpb_bonus = request.form['gpb_bonus']
+    protection_dc = request.form['protection_dc']
+    protection_home = request.form['protection_home']
+
+    # Database connection
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    # Inserting data into table
+    cur.execute("""
+        INSERT INTO reports (
+            city, date, specialist, debet_card, activated_dc, app_cc, issued_cc, activated_cc, life_insurance_cc, protection_cc,
+            app_loan, issued_loan, insurance_loan, app_carloan, issued_carloan, box_carloan, mbg, mci, mcc, autoassistance,
+            issued_dc_cc, sold_dc_cc, rejected_dc_cc, activated_dc_cc, life_insurance_dc_cc, protection_dc_cc, savings_account,
+            fund_savings_account, gpbm, activated_gpbm, payroll_project, gpb_bonus, protection_dc, protection_home
+        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+    """, (
+        city, date, specialist, debet_card, activated_dc, app_cc, issued_cc, activated_cc, life_insurance_cc, protection_cc,
+        app_loan, issued_loan, insurance_loan, app_carloan, issued_carloan, box_carloan, mbg, mci, mcc, autoassistance,
+        issued_dc_cc, sold_dc_cc, rejected_dc_cc, activated_dc_cc, life_insurance_dc_cc, protection_dc_cc, savings_account,
+        fund_savings_account, gpbm, activated_gpbm, payroll_project, gpb_bonus, protection_dc, protection_home
+    ))
+
+    # Saves changes and closes the connection
+    conn.commit()
+    cur.close()
+    conn.close()
+
+    return "Отчет успешно отправлен!"
+
+@app.route('/')
+def index():
+    # Database connection
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    # Get all data from the table
+    cur.execute("SELECT * FROM reports")
+    reports = cur.fetchall()
+
+    # Connection closure
+    cur.close()
+    conn.close()
+
+    # Display data on the page
+    return render_template('index.html', reports=reports)
+
+if __name__ == '__main__':
+    app.run(debug=True)
