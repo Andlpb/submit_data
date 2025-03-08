@@ -1,16 +1,16 @@
+from flask import Flask, request, render_template, redirect, url_for
 import psycopg2
-from flask import Flask, request, render_template
 
 app = Flask(__name__)
 
 # Database connection PostgreSQL
 def get_db_connection():
     conn = psycopg2.connect(
-        dbname="db_name",
-        user="db_user",
-        password="db_password",
-        host="db_host",
-        port="db_port"
+        dbname="your_dbname",
+        user="your_username",
+        password="your_password",
+        host="your_host",
+        port="your_port"
     )
     return conn
 
@@ -20,37 +20,37 @@ def submit_data():
     city = request.form['city']
     date = request.form['date']
     specialist = request.form['specialist']
-    debet_card = request.form['debet_card']
-    activated_dc = request.form['activated_dc']
-    app_cc = request.form['app_cc']
-    issued_cc = request.form['issued_cc']
-    activated_cc = request.form['activated_cc']
-    life_insurance_cc = request.form['life_insurance_cc']
-    protection_cc = request.form['protection_cc']
-    app_loan = request.form['app_loan']
-    issued_loan = request.form['issued_loan']
-    insurance_loan = request.form['insurance_loan']
-    app_carloan = request.form['app_carloan']
-    issued_carloan = request.form['issued_carloan']
-    box_carloan = request.form['box_carloan']
-    mbg = request.form['mbg']
-    mci = request.form['mci']
-    mcc = request.form['mcc']
-    autoassistance = request.form['autoassistance']
-    issued_dc_cc = request.form['issued_dc_cc']
-    sold_dc_cc = request.form['sold_dc_cc']
-    rejected_dc_cc = request.form['rejected_dc_cc']
-    activated_dc_cc = request.form['activated_dc_cc']
-    life_insurance_dc_cc = request.form['life_insurance_dc_cc']
-    protection_dc_cc = request.form['protection_dc_cc']
-    savings_account = request.form['savings_account']
-    fund_savings_account = request.form['fund_savings_account']
-    gpbm = request.form['gpbm']
-    activated_gpbm = request.form['activated_gpbm']
-    payroll_project = request.form['payroll_project']
-    gpb_bonus = request.form['gpb_bonus']
-    protection_dc = request.form['protection_dc']
-    protection_home = request.form['protection_home']
+    debet_card = request.form.get('debet_card', 0, type=int)
+    activated_dc = request.form.get('activated_dc', 0, type=int)
+    app_cc = request.form.get('app_cc', 0, type=int)
+    issued_cc = request.form.get('issued_cc', 0, type=int)
+    activated_cc = request.form.get('activated_cc', 0, type=int)
+    life_insurance_cc = request.form.get('life_insurance_cc', 0, type=int)
+    protection_cc = request.form.get('protection_cc', 0, type=int)
+    app_loan = request.form.get('app_loan', 0, type=int)
+    issued_loan = request.form.get('issued_loan', 0, type=int)
+    insurance_loan = request.form.get('insurance_loan', 0, type=int)
+    app_carloan = request.form.get('app_carloan', 0, type=int)
+    issued_carloan = request.form.get('issued_carloan', 0, type=int)
+    box_carloan = request.form.get('box_carloan', 0, type=int)
+    mbg = request.form.get('mbg', 0, type=int)
+    mci = request.form.get('mci', 0, type=int)
+    mcc = request.form.get('mcc', 0, type=int)
+    autoassistance = request.form.get('autoassistance', 0, type=int)
+    issued_dc_cc = request.form.get('issued_dc_cc', 0, type=int)
+    sold_dc_cc = request.form.get('sold_dc_cc', 0, type=int)
+    rejected_dc_cc = request.form.get('rejected_dc_cc', 0, type=int)
+    activated_dc_cc = request.form.get('activated_dc_cc', 0, type=int)
+    life_insurance_dc_cc = request.form.get('life_insurance_dc_cc', 0, type=int)
+    protection_dc_cc = request.form.get('protection_dc_cc', 0, type=int)
+    savings_account = request.form.get('savings_account', 0, type=int)
+    fund_savings_account = request.form.get('fund_savings_account', 0, type=int)
+    gpbm = request.form.get('gpbm', 0, type=int)
+    activated_gpbm = request.form.get('activated_gpbm', 0, type=int)
+    payroll_project = request.form.get('payroll_project', 0, type=int)
+    gpb_bonus = request.form.get('gpb_bonus', 0, type=int)
+    protection_dc = request.form.get('protection_dc', 0, type=int)
+    protection_home = request.form.get('protection_home', 0, type=int)
 
     # Database connection
     conn = get_db_connection()
@@ -76,7 +76,7 @@ def submit_data():
     cur.close()
     conn.close()
 
-    return "Отчет успешно отправлен!"
+    return redirect(url_for('index'))  # Redirect to the home page
 
 @app.route('/')
 def index():
